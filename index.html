@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket XI Selector</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <h2 id="preloader-text"></h2>
+    </div>
+
+    <!-- Main UI -->
+    <div class="container" id="main-content" style="display: none;">
+        <h1>🏏 Select Your All-Time Best Cricket XI</h1>
+
+        <!-- Format Selection -->
+        <div class="format-selector">
+            <button class="format-btn active" onclick="setFormat('test')">🏏 Test</button>
+            <button class="format-btn" onclick="setFormat('odi')">🌍 ODI</button>
+            <button class="format-btn" onclick="setFormat('t20')">⚡ T20</button>
+        </div>
+
+        <!-- Input Fields -->
+        <div class="input-group">
+            <label>Batters:</label>
+            <input type="number" id="batters" min="6" max="11">
+
+            <label>Pacers:</label>
+            <input type="number" id="pacers" min="2" max="5" oninput="updateBowlers('pace')">
+
+            <label>Spinners:</label>
+            <input type="number" id="spinners" min="2" max="5" oninput="updateBowlers('spin')">
+        </div>
+
+        <!-- Get Team Button -->
+        <button class="get-team-btn" onclick="fetchTeam()">🔥 Get Team</button>
+
+        <!-- Team Display -->
+        <div class="team-container">
+            <h2>🏆 Your Selected Team</h2>
+            <ol id="team-list"></ol>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
