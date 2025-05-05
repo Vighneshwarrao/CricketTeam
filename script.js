@@ -11,7 +11,7 @@ function typeText(text, elementId, delay = 100) {
     let index = 0;
     function type() {
         if (index < text.length) {
-            document.getElementById(elementId).innerHTML += text.charAt(index);
+            document.getElementById(elementId).textContent += text.charAt(index);
             index++;
             setTimeout(type, delay);
         } else {
@@ -25,7 +25,7 @@ function typeText(text, elementId, delay = 100) {
     type();
 }
 
-window.onload = function() {
+window.onload = function () {
     typeText("Hi, welcome to the all-time best India's team selection!", "preloader-text");
 };
 
@@ -42,9 +42,9 @@ function setFormat(format) {
 
 // Auto-adjust pacers & spinners
 function updateBowlers(changed) {
-    let totalBowlers = formats[currentFormat].totalBowlers;
-    let pace = parseInt(document.getElementById("pacers").value);
-    let spin = parseInt(document.getElementById("spinners").value);
+    const totalBowlers = formats[currentFormat].totalBowlers;
+    const pace = parseInt(document.getElementById("pacers").value);
+    const spin = parseInt(document.getElementById("spinners").value);
 
     if (changed === "pace") {
         document.getElementById("spinners").value = totalBowlers - pace;
@@ -55,18 +55,31 @@ function updateBowlers(changed) {
 
 // Fetch Team with Loading State & Animated Reveal
 async function fetchTeam() {
-    let teamList = document.getElementById("team-list");
+    const teamList = document.getElementById("team-list");
     teamList.innerHTML = "<li>Loading team...</li>";
 
-    const response = await fetch(`https://cricketapi-hs0m.onrender.com/${currentFormat}_team`);
-    const data = await response.json();
+    const bat = document.getElementById("batters").value;
+    const pace = document.getElementById("pacers").value;
+    const spin = document.getElementById("spinners").value;
 
-    teamList.innerHTML = "";
-    data.team.forEach((player, index) => {
-        setTimeout(() => {
-            let li = document.createElement("li");
-            li.textContent = player;
-            teamList.appendChild(li);
-        }, index * 200);
-    });
+    const url = `https://cricketapi-hs0m.onrender.com/${currentFormat}_team?bat=${bat}&pace=${pace}&spin=${spin}`;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Network response was not ok");
+
+        const data = await response.json();
+
+        teamList.innerHTML = "";
+        data.team.forEach((player, index) => {
+            setTimeout(() => {
+                const li = document.createElement("li");
+                li.textContent = player;
+                teamList.appendChild(li);
+            }, index * 200);
+        });
+    } catch (error) {
+        console.error("Fetch error:", error);
+        teamList.innerHTML = "<li>Failed to load team. Please try again later.</li>";
+    }
 }
